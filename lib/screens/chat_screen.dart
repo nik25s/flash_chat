@@ -12,7 +12,7 @@ class ChatScreen extends StatefulWidget {
 }
 
 class _ChatScreenState extends State<ChatScreen> {
-  final messagetextcontroller=TextEditingController();
+  final messagetextcontroller=TextEditingController(); // to controll text like after writing text , text should be clear on textfield
   final _auth=FirebaseAuth.instance;
   late String messagetext;
  
@@ -54,8 +54,8 @@ class _ChatScreenState extends State<ChatScreen> {
                   ),
                   FlatButton(
                     onPressed: () {
-                      messagetextcontroller.clear();
-                      _firestore.collection('messages').add({
+                      messagetextcontroller.clear(); //after presssing send button previous written text should b wipped
+                      _firestore.collection('messages').add({ // this line means it will store all text and user-email-id in firebase collection database 
                         'text':messagetext,
                         'sender':loggedinuser!.email,
                       });
@@ -79,7 +79,7 @@ class MessaggeStream extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return     StreamBuilder<QuerySnapshot>(
-              stream: _firestore.collection('messages').snapshots(),
+              stream: _firestore.collection('messages').snapshots(),//controll text and useremail store in firebase as a stream 
               builder: (context, snapshot) 
               {
                     if (!snapshot.hasData) {
