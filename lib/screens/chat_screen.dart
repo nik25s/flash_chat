@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flash_chat/constant.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/services.dart';
    User? loggedinuser;
 class ChatScreen extends StatefulWidget {
   @override
@@ -60,6 +61,27 @@ class _ChatScreenState extends State<ChatScreen> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: <Widget>[
+            StreamBuilder<QuerySnapshot>(
+              stream: _firestore.collection('messages').snapshots(),
+              builder: (context, snapshot) 
+              {
+                    if (snapshot.hasData) {
+                      final messages=snapshot.data!.docs;
+                      List<Text> messageWidgets=[];
+                      for (var message in messages) {
+                             final messagetext=message['text'];
+                             final messagesender=message['sender'];
+                            final messagewidget=Text('$messagetext from $messagesender');
+                            messageWidgets.add(messagewidget);
+                      }
+                         return Column(
+                            children:messageWidgets,
+                         );
+                    }
+                    return null!;
+              },
+              
+              ),
             Container(
               decoration: kMessageContainerDecoration,
               child: Row(
